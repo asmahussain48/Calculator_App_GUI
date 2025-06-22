@@ -15,6 +15,12 @@ public class Calculator{
         String A = "0";
         String Operator = null;
         String B = null;
+        /*
+         * B = null means "waiting for user input for the second number".
+           When the user starts typing, you update B to the entered value.
+           If we  set B = "0" from the start, you can't distinguish between 
+           "no value entered yet" and "user entered zero"
+         */
         String[] buttonValues = {       
                 "AC", "+/-", "%", "/",
                 "7", "8", "9", "x",
@@ -86,14 +92,25 @@ public class Calculator{
                                 public void actionPerformed(ActionEvent e){
                                         JButton button = (JButton) e.getSource();
                                         String buttonValue = button.getText();
-                                        if(Arrays.asList(rightSymbols).contains(buttonValues)){
+                                        if(Arrays.asList(rightSymbols).contains(buttonValue)){
 
-                                        } else if(Arrays.asList(topSymbols).contains(buttonValues)){
+                                        } else if(Arrays.asList(topSymbols).contains(buttonValue)){
                                                 //conditions for top Symbols 
                                                 if(buttonValue == "AC"){
-
+                                                        // function to clear A, Operator, B
+                                                        clearAll();
+                                                        displayLabel.setText("0"); // setting back to 0 
                                                 }
                                                 else if(buttonValue == "+/-"){
+                                        /*
+                                        * If the number is positive, pressing +/- makes it negative.
+                                        If the number is negative, pressing +/- makes it positive.
+                                        If the number is zero, it remains zero.
+                                        */
+                                                        double numDisplay = Double.parseDouble(displayLabel.getText());
+                                                        numDisplay = numDisplay*(-1);
+                                                        displayLabel.setText(Double.toString(numDisplay)); 
+                                                        
 
                                                 }
                                                 else if(buttonValue == "%"){
@@ -126,6 +143,12 @@ public class Calculator{
                 }
 
 
+        }
+
+        void clearAll(){
+                A = "0";
+                Operator = null;
+                B = null;
         }
 
 
