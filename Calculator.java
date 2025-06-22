@@ -1,9 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.lang.reflect.Array;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
-
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 public class Calculator{
@@ -102,19 +100,18 @@ public class Calculator{
                                                         displayLabel.setText("0"); // setting back to 0 
                                                 }
                                                 else if(buttonValue == "+/-"){
-                                        /*
-                                        * If the number is positive, pressing +/- makes it negative.
-                                        If the number is negative, pressing +/- makes it positive.
-                                        If the number is zero, it remains zero.
-                                        */
                                                         double numDisplay = Double.parseDouble(displayLabel.getText());
                                                         numDisplay = numDisplay*(-1);
-                                                        displayLabel.setText(Double.toString(numDisplay)); 
+                                                        //removeZeroDecimal is not built in method
+                                                         displayLabel.setText(removeZeroDecimal(numDisplay)); 
                                                         
 
                                                 }
                                                 else if(buttonValue == "%"){
-
+                                                         double numDisplay = Double.parseDouble(displayLabel.getText());
+                                                        numDisplay = numDisplay/(100);
+                                                        //removeZeroDecimal is not built in method
+                                                         displayLabel.setText(removeZeroDecimal(numDisplay)); 
                                                 }
                                         } else {
                                                  if(buttonValue == "."){
@@ -150,6 +147,17 @@ public class Calculator{
                 Operator = null;
                 B = null;
         }
+
+        String removeZeroDecimal(double numDisplay){
+                if(numDisplay % 1 == 0){
+                        //whole number
+                        return Integer.toString((int) numDisplay);
+                }
+                        return Double.toString(numDisplay);
+                
+                
+        }
+
 
 
           public static void main(String[] args) {
