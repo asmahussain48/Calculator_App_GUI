@@ -1,13 +1,20 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.lang.reflect.Array;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 public class Calculator{
 
         int boarderWidth = 360;
         int boarderHeight = 540;
-
+        // for tracking the Two numbers and Operators 
+        // A+B, A-B, A*B, A/B simple Calculator will update it later
+        String A = "0";
+        String Operator = null;
+        String B = null;
         String[] buttonValues = {       
                 "AC", "+/-", "%", "/",
                 "7", "8", "9", "x",
@@ -59,6 +66,9 @@ public class Calculator{
                         button.setFont(new Font("Arial", Font.PLAIN, 30));
                         button.setText(buttonValue);
                         button.setFocusable(false);// to remove the recatngle our text
+                        button.setBorder(new LineBorder(Color.black,1));
+                        // Prevents the button from showing a focus border when selected or clicked
+                        button.setFocusPainted(false); 
                         if(Arrays.asList(topSymbols).contains(buttonValue)){
                                 button.setBackground(Color.lightGray);
                                 button.setForeground(Color.BLACK);
@@ -72,6 +82,46 @@ public class Calculator{
                         }
 
                         buttonsPanel.add(button);
+                        button.addActionListener(new ActionListener(){
+                                public void actionPerformed(ActionEvent e){
+                                        JButton button = (JButton) e.getSource();
+                                        String buttonValue = button.getText();
+                                        if(Arrays.asList(rightSymbols).contains(buttonValues)){
+
+                                        } else if(Arrays.asList(topSymbols).contains(buttonValues)){
+                                                //conditions for top Symbols 
+                                                if(buttonValue == "AC"){
+
+                                                }
+                                                else if(buttonValue == "+/-"){
+
+                                                }
+                                                else if(buttonValue == "%"){
+
+                                                }
+                                        } else {
+                                                 if(buttonValue == "."){
+                                                        // if a number doesn't have decimal . then we can add one . but if it has it can not have . anothe
+                                                        // =2.45 is okay but 2.45. is not this below code is for handling this
+                                                        if(!displayLabel.getText().contains(buttonValue)){
+                                                                displayLabel.setText(displayLabel.getText() + buttonValue);
+                                                                
+                                                        }
+                                                 }
+                                                 else if("0123456789".contains(buttonValue)){
+                                                        // 05 = 5
+                                                        if(displayLabel.getText() == "0"){
+                                                                displayLabel.setText(buttonValue);
+                                                        }
+                                                        else{
+                                                                displayLabel.setText(displayLabel.getText() + buttonValue);
+
+                                                        }
+                                                 }
+                                        }
+                                }
+                        });
+
 
                 }
 
