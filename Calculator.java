@@ -116,35 +116,66 @@ public class Calculator{
                                 double numA = Double.parseDouble(A);
                                 double numB = Double.parseDouble(B);
                                 
-                                if (Operator == "+"){
-                        
-                                        displayLabel.setText(removeZeroDecimal(numA + numB)); // getting String Value
-                                }
+                                if (Operator == "+") {
+                                        double result = numA + numB;
+                                        displayLabel.setText(removeZeroDecimal(result));
+                                        expressionLabel.setText(A + " " + Operator + " " + B + " = " + removeZeroDecimal(result));
+                                        A = removeZeroDecimal(result); // A is now the value of result 
+                                        B = null;
+                                        Operator = null;
+}
+
                                 else if (Operator == "-"){
-                                        displayLabel.setText(removeZeroDecimal(numA - numB)); // getting String Value
+                                        double result = numA - numB; 
+                                        displayLabel.setText(removeZeroDecimal(result));
+                                        expressionLabel.setText(A + " " + Operator + " " + B + " = " + removeZeroDecimal(result));
+                                        A = removeZeroDecimal(result); // A is now the value of result 
+                                        B = null;
+                                        Operator = null;
                                 }
                                 else if (Operator == "x"){
-                                        displayLabel.setText(removeZeroDecimal(numA * numB)); // getting String Value
+                                        double result = numA * numB; 
+                                        displayLabel.setText(removeZeroDecimal(result));
+                                        expressionLabel.setText(A + " " + Operator + " " + B + " = " + removeZeroDecimal(result));
+                                        A = removeZeroDecimal(result); // A is now the value of result 
+                                        B = null;
+                                        Operator = null;
                                 }
-                                else if (Operator == "/"){
-                                        displayLabel.setText(removeZeroDecimal(numA / numB)); // getting String Value
+                                if (Operator == "/") {
                                 
-                                }   
-                                expressionLabel.setText(A + " " + Operator + " " + B + " = ");
+                                        if (numB == 0) {
+                                                displayLabel.setText("Error");
+                                                expressionLabel.setText(A + " / " + B + " = Error");
+                                        } else {
+                                                double result = numA / numB;
+                                                displayLabel.setText(removeZeroDecimal(result));
+                                                expressionLabel.setText(A + " / " + B + " = " + removeZeroDecimal(result));
+                                                A = removeZeroDecimal(result);
+                                                B = null;
+                                                Operator = null;
+                                        }
+                                }
+
                         }
         
                         }
-                        else if ("+-x/".contains(buttonValue)){
-                                if(Operator == null){
-                                        A = displayLabel.getText(); // setting A to the any value that has written in displayLabel
+                        else if ("+-x/".contains(buttonValue)) {
+                                if (Operator == null) {
+                                        if (displayLabel.getText().equals("0") && buttonValue.equals("-")) {
+                                        displayLabel.setText("-");
+                                        } else {
+                                        A = displayLabel.getText();
                                         displayLabel.setText("0");
-                                        B = "0";
+                                        Operator = buttonValue;
+                                        expressionLabel.setText(A + " " + Operator);
+                                        }
+                                } else {
+                                        // If operator is already set, just update it
+                                        Operator = buttonValue;
+                                        expressionLabel.setText(A + " " + Operator);
                                 }
-                                // if user type button twise etc
-                                Operator = buttonValue;
-                                expressionLabel.setText(A + " " + Operator);
-
                         }
+
 
 
 
@@ -180,6 +211,9 @@ public class Calculator{
                                 }
 
                                 else if (buttonValue == "√") {
+                                        if(Operator == "-"){
+                                                displayLabel.setText("Error"); // Square root of negative number is not real
+                                        }
                                         double num = Double.parseDouble(displayLabel.getText());
 
                                         if (num < 0) {
