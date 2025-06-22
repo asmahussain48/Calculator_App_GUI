@@ -36,8 +36,11 @@ public class Calculator{
         JPanel buttonsPanel = new JPanel();
 
         Calculator(){
-
+                
         frame.setTitle("Calculator");
+        ImageIcon icon = new ImageIcon("calculator.png"); // or use path like "resources/icon.png"
+        frame.setIconImage(icon.getImage());
+
         // frame.setVisible(true); // make it in end for any issue 
         frame.setSize(boarderWidth, boarderHeight);
         frame.setLocationRelativeTo(null); // This centers the Window Frame
@@ -49,22 +52,23 @@ public class Calculator{
         expressionLabel.setForeground(Color.LIGHT_GRAY);
         expressionLabel.setFont(new Font("Arial", Font.PLAIN, 24));
         expressionLabel.setHorizontalAlignment(JLabel.RIGHT);
-        expressionLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        expressionLabel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.DARK_GRAY));
         expressionLabel.setOpaque(true);
 
         displayLabel.setBackground(Color.BLACK);
         displayLabel.setForeground(Color.WHITE);  
-        displayLabel.setFont(new Font("Arial", Font.PLAIN, 80));
+        displayLabel.setFont(new Font("Arial", Font.PLAIN, 60));
         displayLabel.setHorizontalAlignment(JLabel.RIGHT);
         displayLabel.setText("0"); // defalut text 
         displayLabel.setOpaque(true);
+        displayLabel.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.DARK_GRAY));
 
         displayPanel.setLayout(new GridLayout(2,1 )); // it will make 2 
         displayPanel.add(expressionLabel);
         displayPanel.add(displayLabel);
         frame.add(displayPanel, BorderLayout.NORTH);
 
-        buttonsPanel.setLayout(new GridLayout(5, 4)); // 5 rows and 4 columns
+        buttonsPanel.setLayout(new GridLayout(5, 4,5,5)); // 5 rows and 4 columns
         buttonsPanel.setBackground(Color.BLACK);
         buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // outer padding
         buttonsPanel.setLayout(new GridLayout(5, 4, 5, 5)); // 5px gaps
@@ -104,7 +108,7 @@ public class Calculator{
                 public void actionPerformed(ActionEvent e){
                 JButton button = (JButton) e.getSource();
                 String buttonValue = button.getText();
-                        if(Arrays.asList(rightSymbols).contains(buttonValue)){
+                if(Arrays.asList(rightSymbols).contains(buttonValue)){
 
                         if (buttonValue == "="){
                                 if(A != null){
@@ -113,6 +117,7 @@ public class Calculator{
                                 double numB = Double.parseDouble(B);
                                 
                                 if (Operator == "+"){
+                        
                                         displayLabel.setText(removeZeroDecimal(numA + numB)); // getting String Value
                                 }
                                 else if (Operator == "-"){
@@ -123,9 +128,11 @@ public class Calculator{
                                 }
                                 else if (Operator == "/"){
                                         displayLabel.setText(removeZeroDecimal(numA / numB)); // getting String Value
-                                }
-                                expressionLabel.setText(A + " " + Operator + " " + B);
-                                }
+                                
+                                }   
+                                expressionLabel.setText(A + " " + Operator + " " + B + " = ");
+                        }
+        
                         }
                         else if ("+-x/".contains(buttonValue)){
                                 if(Operator == null){
@@ -147,7 +154,6 @@ public class Calculator{
                         if(buttonValue == "AC"){
                                 // function to clear A, Operator, B
                                 clearAll();
-                                displayLabel.setText("0"); // setting back to 0 
                         }
                         else if(buttonValue == "+/-"){
                                 double numDisplay = Double.parseDouble(displayLabel.getText());
@@ -169,9 +175,28 @@ public class Calculator{
                                 // =2.45 is okay but 2.45. is not this below code is for handling this
                                 if(!displayLabel.getText().contains(buttonValue)){
                                         displayLabel.setText(displayLabel.getText() + buttonValue);
-                                        
+
+                                        }
                                 }
-                                }
+
+                                else if (buttonValue == "√") {
+                                        double num = Double.parseDouble(displayLabel.getText());
+
+                                        if (num < 0) {
+                                                displayLabel.setText("Error"); // Square root of negative number is not real
+                                                expressionLabel.setText("√(" + displayLabel.getText() + ")");
+                                        } else {
+                                                double result = Math.sqrt(num);
+                                                displayLabel.setText(removeZeroDecimal(result));
+                                                expressionLabel.setText("√(" + removeZeroDecimal(num) + ") = ");
+                                        }
+
+                                        A = removeZeroDecimal(num);
+                                        Operator = "√";
+                                        B = null;
+                                        }
+
+
                                 else if("0123456789".contains(buttonValue)){
                                 // 05 = 5
                                 if(displayLabel.getText() == "0"){
@@ -193,14 +218,17 @@ public class Calculator{
 
 
         }
-
-        frame.setVisible(true); 
+        frame.setUndecorated(false); // keep OS window bar, or true if you want custom
+        frame.setLocationRelativeTo(null); // center window
+        frame.setVisible(true);
         }
 
         void clearAll(){
                 A = "0";
                 Operator = null;
                 B = null;
+                  expressionLabel.setText(""); // will clear the expression Label too
+                  displayLabel.setText("0");
         }
 
         String removeZeroDecimal(double numDisplay){
