@@ -31,6 +31,7 @@ public class Calculator{
         
         JFrame  frame = new JFrame();
         JLabel displayLabel = new JLabel();
+        JLabel expressionLabel = new JLabel();
         JPanel displayPanel = new JPanel();
         JPanel buttonsPanel = new JPanel();
 
@@ -43,6 +44,13 @@ public class Calculator{
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout()); // Set to north, south , west, east
+        frame.getContentPane().setBackground(Color.BLACK);
+        expressionLabel.setBackground(Color.BLACK);
+        expressionLabel.setForeground(Color.LIGHT_GRAY);
+        expressionLabel.setFont(new Font("Arial", Font.PLAIN, 24));
+        expressionLabel.setHorizontalAlignment(JLabel.RIGHT);
+        expressionLabel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.GRAY));
+        expressionLabel.setOpaque(true);
 
         displayLabel.setBackground(Color.BLACK);
         displayLabel.setForeground(Color.WHITE);  
@@ -51,12 +59,16 @@ public class Calculator{
         displayLabel.setText("0"); // defalut text 
         displayLabel.setOpaque(true);
 
-        displayPanel.setLayout(new BorderLayout());
+        displayPanel.setLayout(new GridLayout(2,1 )); // it will make 2 
+        displayPanel.add(expressionLabel);
         displayPanel.add(displayLabel);
         frame.add(displayPanel, BorderLayout.NORTH);
 
         buttonsPanel.setLayout(new GridLayout(5, 4)); // 5 rows and 4 columns
         buttonsPanel.setBackground(Color.BLACK);
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5)); // outer padding
+        buttonsPanel.setLayout(new GridLayout(5, 4, 5, 5)); // 5px gaps
+
         // Add a border to the buttons panel
         // Border border = BorderFactory.createEmptyBorder(10, 10, 10, 10);
         // buttonsPanel.setBorder(border);
@@ -65,10 +77,12 @@ public class Calculator{
         for(int i = 0; i<buttonValues.length; i++){
                 JButton button = new JButton();
                 String buttonValue = buttonValues[i];
+                // if wants to make buttons to round then uncomment below line
+                // RoundButton button = new RoundButton(buttonValue);
                 button.setFont(new Font("Arial", Font.PLAIN, 30));
                 button.setText(buttonValue);
                 button.setFocusable(false);// to remove the recatngle our text
-                button.setBorder(new LineBorder(Color.black,1));
+                // button.setBorder(new LineBorder(Color.black,1));
                 // Prevents the button from showing a focus border when selected or clicked
                 button.setFocusPainted(false); 
                 if(Arrays.asList(topSymbols).contains(buttonValue)){
@@ -91,7 +105,7 @@ public class Calculator{
                 JButton button = (JButton) e.getSource();
                 String buttonValue = button.getText();
                         if(Arrays.asList(rightSymbols).contains(buttonValue)){
-                                
+
                         if (buttonValue == "="){
                                 if(A != null){
                                 B = displayLabel.getText();
@@ -110,6 +124,7 @@ public class Calculator{
                                 else if (Operator == "/"){
                                         displayLabel.setText(removeZeroDecimal(numA / numB)); // getting String Value
                                 }
+                                expressionLabel.setText(A + " " + Operator + " " + B);
                                 }
                         }
                         else if ("+-x/".contains(buttonValue)){
@@ -120,6 +135,7 @@ public class Calculator{
                                 }
                                 // if user type button twise etc
                                 Operator = buttonValue;
+                                expressionLabel.setText(A + " " + Operator);
 
                         }
 
@@ -165,6 +181,11 @@ public class Calculator{
                                         displayLabel.setText(displayLabel.getText() + buttonValue);
 
                                 }
+
+                                if (Operator != null) {
+                                        expressionLabel.setText(A + " " + Operator + " " + displayLabel.getText());
+                                }
+
                                 }
                 }
         }
